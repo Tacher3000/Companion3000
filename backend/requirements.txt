@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+sqlalchemy[asyncio]
+asyncpg
+psycopg2-binary
+redis
+httpx
+passlib[bcrypt]
+python-jose[cryptography]
+python-dotenv
+pydantic-settings
+email-validator
