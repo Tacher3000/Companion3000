@@ -17,10 +17,10 @@ COPY backend/requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 # Копируем исходный код бэкенда
-COPY backend/ /code/app
+COPY backend/ /code/
 
 # Uvicorn будет запущен на порту 8000
 EXPOSE 8000
 
 # Запускаем приложение
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

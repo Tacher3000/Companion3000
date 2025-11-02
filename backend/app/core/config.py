@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     POLZA_API_KEY: str
 
     FRONTEND_URL: str
+    HTTPS_ENABLED: bool = False
 
     class Config:
         env_file = ".env"

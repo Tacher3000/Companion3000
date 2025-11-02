@@ -36,7 +36,7 @@ export default function LoginPage() {
       formData.append('password', data.password);
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/token`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/token`,  // Добавил /v1
         {
           method: 'POST',
           headers: {
@@ -51,7 +51,7 @@ export default function LoginPage() {
         throw new Error(errorData.detail || 'Login failed');
       }
 
-      const { access_token } = await response.json();
+      const { access_token, refresh_token } = await response.json();
       setToken(access_token);
       router.push('/dashboard');
     } catch (err: any) {

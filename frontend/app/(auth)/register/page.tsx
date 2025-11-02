@@ -36,7 +36,7 @@ export default function RegisterPage() {
     setError(null);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/register`,  // Добавил /v1
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -58,7 +58,7 @@ export default function RegisterPage() {
       loginData.append('password', data.password);
 
       const loginRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/token`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/token`,  // Добавил /v1
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -66,7 +66,12 @@ export default function RegisterPage() {
         }
       );
 
-      const { access_token } = await loginRes.json();
+      if (!loginRes.ok) {
+        const err = await loginRes.json();
+        throw new Error(err.detail || 'Ошибка входа');
+      }
+
+      const { access_token, refresh_token } = await loginRes.json();
       setToken(access_token);
       router.push('/dashboard');
     } catch (err: any) {

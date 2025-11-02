@@ -38,7 +38,7 @@ function useChatSocket(url: string) {
 
 export default function ChatPage() {
   const wsUrl = (process.env.NEXT_PUBLIC_API_URL || 'ws://localhost:8000')
-    .replace('http', 'ws') + '/api/chat/stream';
+    .replace('http', 'ws') + '/api/v1/chat/stream';
 
   const { messages, sendMessage } = useChatSocket(wsUrl);
   const [input, setInput] = useState('');

@@ -1,26 +1,25 @@
-# backend/app/api/routers/auth.py
-
 from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from typing import Optional
 
 from app.db.session import get_db
 from app.models import User
 from app.schemas import UserCreate, Token, TokenPayload
 from app.core import security
 from app.core.config import settings
-from app.crud import user_crud
+from typing import Optional
 
-router = APIRouter(tags=["auth"])  # Без prefix, как в предыдущем фиксе
+router = APIRouter(prefix="/auth", tags=["auth"])
+
 
 # Функция для поиска пользователя по email
 async def get_user_by_email(db: AsyncSession, email: str) -> Optional[User]:
     stmt = select(User).where(User.email == email)
     result = await db.execute(stmt)
     return result.scalars().first()
+
 
 # --- Регистрация ---
 @router.post("/register", response_model=UserCreate, status_code=status.HTTP_201_CREATED)
@@ -44,6 +43,7 @@ async def register_user(user_in: UserCreate, db: AsyncSession = Depends(get_db))
     # Возвращаем данные пользователя, но без хешированного пароля (используем UserCreate)
     # Здесь можно вернуть UserPublic, но для простоты используем UserCreate
     return user_in
+
 
 # --- Вход (Получение токенов) ---
 @router.post("/token", response_model=Token)
@@ -78,6 +78,7 @@ async def login_for_access_token(
     return Token(access_token=access_token,
                  refresh_token=refresh_token)  # Refresh token возвращаем и в теле ответа для фронтенда
 
+
 # --- Обновление токена ---
 @router.post("/refresh", response_model=Token)
 async def refresh_access_token(request: Request, response: Response, db: AsyncSession = Depends(get_db)):
@@ -92,7 +93,7 @@ async def refresh_access_token(request: Request, response: Response, db: AsyncSe
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired refresh token")
 
     user_email = payload.sub
-    user = await user_crud.get_user_by_email(db, user_email)
+    user = await get_user_by_email(db, user_email)
 
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")

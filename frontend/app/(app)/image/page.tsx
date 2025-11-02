@@ -18,22 +18,22 @@ export default function ImageGenPage() {
     formState: { isSubmitting },
   } = useForm<FormValues>();
 
-  const onSubmit = async (data: FormValues) => {
-    setError(null);
-    setImages([]);
-    try {
-      const payload = {
-        prompt: data.prompt,
-        steps: 25,
-      };
-      const response = await apiFetch('/api/image/generate', {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      });
-      setImages(response.images); // Ожидаем base64 строки
-    } catch (err: any) {
-      setError(err.message);
-    }
+    const onSubmit = async (data: FormValues) => {
+        setError(null);
+        setImages([]);
+        try {
+          const payload = {
+            prompt: data.prompt,
+            steps: 25,
+          };
+          const response = await apiFetch('/image/generate', {  // Убрал /api
+            method: 'POST',
+            body: JSON.stringify(payload),
+          });
+          setImages(response.images); // Ожидаем base64 строки
+        } catch (err: any) {
+          setError(err.message);
+        }
   };
 
   return (

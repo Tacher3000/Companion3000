@@ -10,3 +10,6 @@ python-jose[cryptography]
 python-dotenv
 pydantic-settings
 email-validator
+python-multipart
+sqlmodel
+fastapi-users[jwt]

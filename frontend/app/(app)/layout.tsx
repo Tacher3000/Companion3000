@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/auth';
@@ -6,19 +7,6 @@ import { LogOut, LayoutDashboard, MessageSquare, Image } from 'lucide-react';
 import Link from 'next/link';
 
 import Header from '@/components/header';
-
-export default function AppLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex min-h-screen flex-col">
-      <Header />
-      <main className="flex-1">{children}</main>
-    </div>
-  );
-}
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -73,6 +61,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto bg-neutral-900 p-8">
+        <Header /> {/* If you want the Header here; otherwise, remove this line */}
         {children}
       </main>
     </div>

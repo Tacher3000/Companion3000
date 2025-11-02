@@ -1,6 +1,7 @@
 'use client';
 import { useAuthStore } from '@/lib/store/auth';
 import apiFetch from '@/lib/api';
+import { UserPublic } from '@/lib/schemas/user';
 import { useEffect, useState } from 'react';
 
 type User = {
@@ -14,7 +15,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userData = await apiFetch('/api/users/me');
+        const userData = await apiFetch('/users/me');  // Убрал /api
         setUser(userData);
       } catch (error) {
         console.error('Failed to fetch user', error);
